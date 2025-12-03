@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.metrics.MetricsCalculator;
 import org.example.metrics.MetricsContext;
 import org.example.visitor.MetricsClassVisitor;
 import org.objectweb.asm.ClassReader;
@@ -71,9 +72,15 @@ public class Main {
             }
         }
 
-        System.out.println("Classes found: " +  context.classesInfo.size());
-        for (var ci : context.classesInfo.values()) {
-            System.out.println(ci.name + " extends " + ci.superName + ", fields=" + ci.fieldCount);
-        }
+        var metricsCalculator = new MetricsCalculator(context);
+        var metricsResult = metricsCalculator.calculate();
+        System.out.println(metricsResult.toString());
+
+//        System.out.println("Classes found: " +  context.getAllClassesInfo().size());
+//        for (var ci : context.getAllClassesInfo()) {
+//            System.out.println(
+//                    ci.getName() + " extends " + ci.getSuperName() +", fields=" + ci.getFieldCount()
+//            );
+//        }
     }
 }

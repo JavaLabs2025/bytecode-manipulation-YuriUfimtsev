@@ -1,12 +1,28 @@
 package org.example.metrics;
 
+import lombok.Getter;
+import org.example.metrics.model.ClassInfo;
+
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 public class MetricsContext {
-    public final Map<String, ClassInfo> classesInfo = new HashMap<>();
+    private final Map<String, ClassInfo> classesInfo = new HashMap<>();
 
-    public ClassInfo getOrCreateClass(String name, String superName) {
-        return classesInfo.computeIfAbsent(name, n -> new ClassInfo(n, superName));
+    private long assignments = 0;
+    private long branches = 0;
+    private long conditions = 0;
+
+    public ClassInfo getOrCreateClass(String name, String superName, int access) {
+        return classesInfo.computeIfAbsent(name, n -> new ClassInfo(n, superName, access));
+    }
+
+    public ClassInfo getClassInfo(String name) {
+        return classesInfo.get(name);
+    }
+
+    public Collection<ClassInfo> getAllClassesInfo() {
+        return classesInfo.values();
     }
 }
