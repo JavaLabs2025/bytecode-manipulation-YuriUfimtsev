@@ -8,20 +8,26 @@ import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-public class Example {
+public class Main {
 
     public static void main(String[] args) throws IOException {
-//        var printer = new ByteCodePrinter();
-//        printer.printBubbleSortBytecode();
-        try (JarFile sampleJar = new JarFile("src/main/resources/sample.jar")) {
+        if (args.length != 2) {
+            System.err.println("Please, use format: java <input.jar> <output.json>");
+            return;
+        }
+
+        var jarPath = args[0];
+        var jsonPath = args[1];
+
+        try (JarFile sampleJar = new JarFile(jarPath)) {
             Enumeration<JarEntry> enumeration = sampleJar.entries();
 
             while (enumeration.hasMoreElements()) {
                 JarEntry entry = enumeration.nextElement();
                 if (entry.getName().endsWith(".class")) {
-                    ClassPrinter cp = new ClassPrinter();
-                    ClassReader cr = new ClassReader(sampleJar.getInputStream(entry));
-                    cr.accept(cp, 0);
+                    ClassPrinter classPrinter = new ClassPrinter();
+                    ClassReader classReader = new ClassReader(sampleJar.getInputStream(entry));
+                    classReader.accept(classPrinter, 0);
                 }
             }
         }
