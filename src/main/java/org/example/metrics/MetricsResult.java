@@ -1,21 +1,30 @@
 package org.example.metrics;
 
+import lombok.Builder;
+import lombok.Getter;
 
+// todo: refactor to record
+@Builder
+@Getter
 public class MetricsResult {
     private final int maxInheritanceDepth;
     private final double avgInheritanceDepth;
-    private final double avgFieldsPerClass;
 
-    public MetricsResult(int maxInheritanceDepth, double avgInheritanceDepth, double avgFieldsPerClass) {
-        this.maxInheritanceDepth = maxInheritanceDepth;
-        this.avgInheritanceDepth = avgInheritanceDepth;
-        this.avgFieldsPerClass = avgFieldsPerClass;
-    }
+    private final long abcAssignments;
+    private final long abcBranches;
+    private final long abcConditions;
+
+    private final double avgOverriddenMethods;
+    private final double avgFieldsPerClass;
+    private final int classesCount;
 
     @Override
     public String toString() {
-        return "Max inheritance depth: " + maxInheritanceDepth +
-                "\nAvg inheritance depth: " + avgInheritanceDepth +
-                "\nAvg fields per class: " + avgFieldsPerClass + "\n";
+        return "Classes: " + classesCount + "\n" +
+                "Max inheritance depth: " + maxInheritanceDepth + "\n" +
+                "Avg inheritance depth: " + avgInheritanceDepth + "\n" +
+                "ABC: A=" + abcAssignments + ", B=" + abcBranches + ", C=" + abcConditions + "\n" +
+                "Avg overridden methods per class: " + avgOverriddenMethods + "\n" +
+                "Avg fields per class: " + avgFieldsPerClass + "\n";
     }
 }

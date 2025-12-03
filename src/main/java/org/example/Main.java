@@ -2,9 +2,11 @@ package org.example;
 
 import org.example.metrics.MetricsCalculator;
 import org.example.metrics.MetricsContext;
+import org.example.metrics.MetricsResult;
 import org.example.visitor.MetricsClassVisitor;
 import org.objectweb.asm.ClassReader;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -13,6 +15,9 @@ import java.nio.file.Path;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 public class Main {
 
@@ -52,6 +57,24 @@ public class Main {
             return;
         }
 
+        var metricsResult = getMetricsResult(jarPath);
+        System.out.println(metricsResult.toString());
+
+        var mapper = new ObjectMapper();
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+
+        var jsonFile = new File(jsonPath);
+        mapper.writeValue(jsonFile, metricsResult);
+
+//        System.out.println("Classes found: " +  context.getAllClassesInfo().size());
+//        for (var ci : context.getAllClassesInfo()) {
+//            System.out.println(
+//                    ci.getName() + " extends " + ci.getSuperName() +", fields=" + ci.getFieldCount()
+//            );
+//        }
+    }
+
+    private static MetricsResult getMetricsResult(String jarPath) throws IOException {
         var context = new MetricsContext();
 
         try (JarFile sampleJar = new JarFile(jarPath)) {
@@ -74,13 +97,6 @@ public class Main {
 
         var metricsCalculator = new MetricsCalculator(context);
         var metricsResult = metricsCalculator.calculate();
-        System.out.println(metricsResult.toString());
-
-//        System.out.println("Classes found: " +  context.getAllClassesInfo().size());
-//        for (var ci : context.getAllClassesInfo()) {
-//            System.out.println(
-//                    ci.getName() + " extends " + ci.getSuperName() +", fields=" + ci.getFieldCount()
-//            );
-//        }
+        return metricsResult;
     }
 }

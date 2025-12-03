@@ -38,6 +38,9 @@ public class MetricsClassVisitor extends ClassVisitor {
             currentClassInfo.addMethodInfo(
                     new MethodInfo(name, desc, access)
             );
+
+            var baseVisitor = super.visitMethod(access, name, desc, signature, exceptions);
+            return new MetricsMethodVisitor(metricsContext, baseVisitor);
         }
         return super.visitMethod(access, name, desc, signature, exceptions);
     }

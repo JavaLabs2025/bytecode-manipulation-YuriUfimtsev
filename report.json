@@ -1,0 +1,10 @@
+{
+  "maxInheritanceDepth" : 1,
+  "avgInheritanceDepth" : 0.25,
+  "abcAssignments" : 134,
+  "abcBranches" : 83,
+  "abcConditions" : 41,
+  "avgOverriddenMethods" : 0.0,
+  "avgFieldsPerClass" : 2.4375,
+  "classesCount" : 16
+}

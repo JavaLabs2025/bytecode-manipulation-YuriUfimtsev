@@ -1,5 +1,9 @@
 package org.example.metrics.model;
 
+import lombok.Getter;
+
+// todo: refactor to record
+@Getter
 public class MethodInfo {
     private final String name;
     private final String description;
